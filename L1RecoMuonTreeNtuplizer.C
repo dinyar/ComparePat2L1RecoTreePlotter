@@ -28,12 +28,12 @@ using namespace L1Analysis;
 #define RPCf 3
 #define GMT 4
 
-class GMTChargeAssignmentNtupleizer : public L1Ntuple {
+class L1RecoMuonTreeNtuplizer : public L1Ntuple {
  public:
   // constructor
-  GMTChargeAssignmentNtupleizer(std::string filename) : L1Ntuple(filename) {}
-  GMTChargeAssignmentNtupleizer() : L1Ntuple() {}
-  ~GMTChargeAssignmentNtupleizer() {}
+  L1RecoMuonTreeNtuplizer(std::string filename) : L1Ntuple(filename) {}
+  L1RecoMuonTreeNtuplizer() : L1Ntuple() {}
+  ~L1RecoMuonTreeNtuplizer() {}
 
   // main function macro : arguments can be adpated to your need
   void run(Long64_t nevents);
@@ -51,7 +51,7 @@ class GMTChargeAssignmentNtupleizer : public L1Ntuple {
 // --------------------------------------------------------------------
 // run function
 // --------------------------------------------------------------------
-void GMTChargeAssignmentNtupleizer::run(Long64_t nevents) {
+void L1RecoMuonTreeNtuplizer::run(Long64_t nevents) {
   toggleBranches();
 
   // Create ntuple
@@ -119,9 +119,9 @@ void GMTChargeAssignmentNtupleizer::run(Long64_t nevents) {
   out->Write();
 }
 
-void GMTChargeAssignmentNtupleizer::fillNtuple(
-    int recoMu1, int N, std::vector<std::string> contentList,
-    Float_t ntupleValues[]) {
+void L1RecoMuonTreeNtuplizer::fillNtuple(int recoMu1, int N,
+                                         std::vector<std::string> contentList,
+                                         Float_t ntupleValues[]) {
   for (size_t varIt = 0; varIt < contentList.size(); ++varIt) {
     if (contentList[varIt] == "N_reco") {
       ntupleValues[varIt] = N;
@@ -141,7 +141,7 @@ void GMTChargeAssignmentNtupleizer::fillNtuple(
   }
 }
 
-void GMTChargeAssignmentNtupleizer::toggleBranches() {
+void L1RecoMuonTreeNtuplizer::toggleBranches() {
   // Select only needed branches:
   fChain->SetBranchStatus("*", 0);
 
