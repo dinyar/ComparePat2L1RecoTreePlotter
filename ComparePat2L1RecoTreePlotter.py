@@ -120,6 +120,7 @@ PlottingVars = namedtuple("PlottingVars", ["quantity", "binning",
 binning_eta = [16, -1.6, 1.6]
 binning_pT = [35, 0, 35]
 
+upperRight = [0.5, 0.75, 0.65, 0.9]
 defaultLegendPositions = [upperRight, upperRight]
 
 # Construct plotting variables
