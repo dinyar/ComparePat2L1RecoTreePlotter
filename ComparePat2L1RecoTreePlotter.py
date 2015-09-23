@@ -31,8 +31,7 @@ def makeHistogram(title, binning, quantity):
 
 # Create histograms, etc.
 def plotMuQuantities_pat(events, label, handle, plottingVariables):
-    events_noOS.toBegin()
-    events_OSrequired.toBegin()
+    events_patTree.toBegin()
 
     # Book histograms
     particleHistorgrams = []
@@ -42,7 +41,7 @@ def plotMuQuantities_pat(events, label, handle, plottingVariables):
         particleHistorgrams.append(histo)
 
     # loop over events
-    for event in events:
+    for event in events_patTree:
         # use getByLabel, just like in cmsRun
         event.getByLabel(label, handle)
         # get the product
