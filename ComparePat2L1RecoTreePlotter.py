@@ -48,7 +48,8 @@ def plotMuQuantities_pat(events, label, handle, plottingVariables):
         muons = handle.product()
         # use muons to make J/Psi peak
         numMuons = len(muons)
-        print "Number of muons: " + str(numMuons)
+        if numMuons != 2:
+            print "Number of muons: " + str(numMuons)
 
         for mu in xrange(numMuons - 1):
             muon = muons[mu]
