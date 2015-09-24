@@ -133,6 +133,6 @@ plotEta = PlottingVars(quantity="eta", binning=binning_eta, title="muVsEta")
 plotPhi = PlottingVars(quantity="phi", binning=binning_phi, title="muVsPhi")
 
 # Construct plotting lists
-plotVars = [plotPt, plotEta]
+plotVars = [plotPt, plotEta, plotPhi]
 
 makeComparisonPlots(label, handle, plotVars)
