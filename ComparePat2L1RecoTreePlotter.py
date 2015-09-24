@@ -90,10 +90,10 @@ def makeComparisonPlots(label, handle, plottingVariables):
                                                                  plottingVariables):
         # Draw histograms
         c1 = ROOT.TCanvas("", "", 1024, 786)
-        muonHist_patTree.SetLineColor(ROOT.kRed)
-        muonHist_patTree.DrawCopy("E1HIST")
         muonHist_l1muRecoTree.SetLineColor(ROOT.kBlue)
-        muonHist_l1muRecoTree.DrawCopy("E1HISTSAME")
+        muonHist_l1muRecoTree.DrawCopy("E1HIST")
+        muonHist_patTree.SetLineColor(ROOT.kRed)
+        muonHist_patTree.DrawCopy("E1HISTSAME")
         c1.Print(plotVar.title + ".pdf")
 
 f = ROOT.TFile.Open("L1RecoMuTreeNtuple.root")
@@ -120,7 +120,8 @@ PlottingVars = namedtuple("PlottingVars", ["quantity", "binning",
                                            "title"])
 
 # Binning lists
-binning_eta = [16, -1.6, 1.6]
+binning_phi = [16, -3.14, 3.14]
+binning_eta = [16, -2.6, 2.6]
 binning_pT = [35, 0, 35]
 
 upperRight = [0.5, 0.75, 0.65, 0.9]
@@ -129,6 +130,7 @@ defaultLegendPositions = [upperRight, upperRight]
 # Construct plotting variables
 plotPt = PlottingVars(quantity="pt", binning=binning_pT, title="muVsPt")
 plotEta = PlottingVars(quantity="eta", binning=binning_eta, title="muVsEta")
+plotPhi = PlottingVars(quantity="phi", binning=binning_phi, title="muVsPhi")
 
 # Construct plotting lists
 plotVars = [plotPt, plotEta]
