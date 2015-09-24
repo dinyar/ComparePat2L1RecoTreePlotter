@@ -98,10 +98,11 @@ def makeComparisonPlots(label, handle, plottingVariables):
 
 f = ROOT.TFile.Open("L1RecoMuTreeNtuple.root")
 ntuple_l1recoMuonTree = f.Get("ntuple")
-# How to combine several pat tuple files here?
-f_patTree = ROOT.TChain()
-fc = ROOT.TFileCollection("tfc", "", "pattuple_list")
-f_patTree.AddFileInfoList(fc.GetList())
+
+f_patTree = ROOT.TChain("Events")
+lines = [line.strip() for line in open('pattuple_list')]
+for fn in lines:
+    f_patTree.Add(fn)
 events_patTree = Events(f_patTree)
 
 # create handle outside of loop
