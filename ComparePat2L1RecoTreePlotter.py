@@ -30,8 +30,7 @@ def makeHistogram(title, binning, quantity):
 
 
 # Create histograms, etc.
-def plotMuQuantities_pat(events, label, handle, plottingVariables):
-    events_patTree.toBegin()
+def plotMuQuantities_pat(patTuple_list, label, handle, plottingVariables):
 
     # Book histograms
     particleHistorgrams = []
@@ -40,29 +39,33 @@ def plotMuQuantities_pat(events, label, handle, plottingVariables):
                               plottingVar.quantity)
         particleHistorgrams.append(histo)
 
-    # loop over events
-    for event in events:
-        # use getByLabel, just like in cmsRun
-        event.getByLabel(label, handle)
-        # get the product
-        muons = handle.product()
-        # use muons to make J/Psi peak
-        numMuons = len(muons)
-        if numMuons != 2:
-            print "Number of muons: " + str(numMuons)
+    for patTuple in patTuple_list:
+        f_patTree = ROOT.TFile.Open(patTuple)
+        events = Events(f_patTree)
+        events.toBegin()
+        # loop over events
+        for event in events:
+            # use getByLabel, just like in cmsRun
+            event.getByLabel(label, handle)
+            # get the product
+            muons = handle.product()
+            # use muons to make J/Psi peak
+            numMuons = len(muons)
+            if numMuons != 2:
+                print "Number of muons: " + str(numMuons)
 
-        for mu in xrange(numMuons - 1):
-            muon = muons[mu]
-            for plottingVar, hist in izip(plottingVariables,
-                                          particleHistorgrams):
-                if plottingVar.quantity == "eta":
-                    hist.Fill(muon.eta())
-                elif plottingVar.quantity == "phi":
-                    hist.Fill(muon.phi())
-                elif plottingVar.quantity == "pt":
-                    hist.Fill(muon.pt())
-                elif plottingVar.quantity == "ch":
-                    hist.Fill(muon.ch())
+            for mu in xrange(numMuons - 1):
+                muon = muons[mu]
+                for plottingVar, hist in izip(plottingVariables,
+                                              particleHistorgrams):
+                    if plottingVar.quantity == "eta":
+                        hist.Fill(muon.eta())
+                    elif plottingVar.quantity == "phi":
+                        hist.Fill(muon.phi())
+                    elif plottingVar.quantity == "pt":
+                        hist.Fill(muon.pt())
+                    elif plottingVar.quantity == "ch":
+                        hist.Fill(muon.ch())
     return particleHistorgrams
 
 def plotMuQuantities_l1(ntuple, plottingVariables):
@@ -75,13 +78,14 @@ def plotMuQuantities_l1(ntuple, plottingVariables):
         particleHistorgrams.append(histo)
     return particleHistorgrams
 
-def makeComparisonPlots(label, handle, plottingVariables):
+def makeComparisonPlots(patTuple_list, ntuple_l1recoMuonTree, label, handle,
+                        plottingVariables):
     ROOT.gROOT.SetBatch()        # don't pop up canvases
     ROOT.gStyle.SetErrorX(0)
 
     tdrstyle.setTDRStyle()
 
-    muonHists_patTree = plotMuQuantities_pat(events_patTree, label, handle,
+    muonHists_patTree = plotMuQuantities_pat(patTuple_list, label, handle,
                                              plottingVariables)
     muonHists_l1muRecoTree = plotMuQuantities_l1(ntuple_l1recoMuonTree,
                                                  plottingVariables)
@@ -99,15 +103,7 @@ def makeComparisonPlots(label, handle, plottingVariables):
 
 f = ROOT.TFile.Open("L1RecoMuTreeNtuple.root")
 ntuple_l1recoMuonTree = f.Get("ntuple")
-
-f_patChain = ROOT.TChain("Events")
-lines = [line.strip() for line in open('pattuple_list')]
-for fn in lines:
-    f_patChain.Add(fn)
-events_patChain = Events(f_patChain)
-
-f_patTree = ROOT.TFile.Open("root://cmsxrootd.fnal.gov//store/user/dinyar/cancel_out_studies/JPsiToMuMu_Pt20to120_EtaPhiRestricted/pattuples/JPsiToMuMu_Pt20to120_EtaPhiRestricted-pythia8-gun/crab_PATNtuple-JPsiToMuMu_Pt20to120_EtaPhiRestricted/150814_173307/0000/patTuple_standard_1.root")
-events_patTree = Events(f_patTree)
+patTuple_list = [line.strip() for line in open('pattuple_list')]
 
 # create handle outside of loop
 handle = Handle("std::vector<pat::Muon>")
@@ -136,4 +132,5 @@ plotPhi = PlottingVars(quantity="phi", binning=binning_phi, title="muVsPhi")
 # Construct plotting lists
 plotVars = [plotPt, plotEta, plotPhi]
 
-makeComparisonPlots(label, handle, plotVars)
+makeComparisonPlots(patTuple_list, ntuple_l1recoMuonTree, label, handle,
+                    plotVars)
