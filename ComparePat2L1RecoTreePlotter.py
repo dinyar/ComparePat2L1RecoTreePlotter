@@ -99,10 +99,13 @@ def makeComparisonPlots(label, handle, plottingVariables):
 f = ROOT.TFile.Open("L1RecoMuTreeNtuple.root")
 ntuple_l1recoMuonTree = f.Get("ntuple")
 
-f_patTree = ROOT.TChain("Events")
+f_patChain = ROOT.TChain("Events")
 lines = [line.strip() for line in open('pattuple_list')]
 for fn in lines:
-    f_patTree.Add(fn)
+    f_patChain.Add(fn)
+events_patChain = Events(f_patChain)
+
+f_patTree = ROOT.TFile.Open("root://cmsxrootd.fnal.gov//store/user/dinyar/cancel_out_studies/JPsiToMuMu_Pt20to120_EtaPhiRestricted/pattuples/JPsiToMuMu_Pt20to120_EtaPhiRestricted-pythia8-gun/crab_PATNtuple-JPsiToMuMu_Pt20to120_EtaPhiRestricted/150814_173307/0000/patTuple_standard_1.root")
 events_patTree = Events(f_patTree)
 
 # create handle outside of loop
